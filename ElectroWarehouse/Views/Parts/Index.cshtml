@@ -24,9 +24,17 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Наименование детали</th>
+            <th>
+                <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.NameSort">
+                    Наименование детали
+                </a>
+            </th>
             <th>Артикул</th>
-            <th>Количество на складе</th>
+            <th>
+                <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.QuantitySort">
+                    Количество на складе
+                </a>
+            </th>
             <th>Поставщик</th>
             <th></th>
         </tr>

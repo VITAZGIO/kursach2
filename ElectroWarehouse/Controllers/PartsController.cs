@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +15,12 @@ namespace ElectroWarehouse.Controllers
             _context = context;
         }
 
-        // GET: Parts
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, string? sortOrder)
         {
+            ViewBag.Search = search;
+            ViewBag.NameSort = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.QuantitySort = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+
             var parts = _context.Parts
                 .Include(p => p.Supplier)
                 .AsQueryable();
@@ -34,40 +33,37 @@ namespace ElectroWarehouse.Controllers
                     p.Supplier!.Name.Contains(search));
             }
 
-            ViewBag.Search = search;
+            parts = sortOrder switch
+            {
+                "name" => parts.OrderBy(p => p.Name),
+                "name_desc" => parts.OrderByDescending(p => p.Name),
+                "quantity" => parts.OrderBy(p => p.QuantityInStock),
+                "quantity_desc" => parts.OrderByDescending(p => p.QuantityInStock),
+                _ => parts.OrderBy(p => p.Name)
+            };
 
             return View(await parts.ToListAsync());
         }
 
-        // GET: Parts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var part = await _context.Parts
                 .Include(p => p.Supplier)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (part == null)
-            {
-                return NotFound();
-            }
+
+            if (part == null) return NotFound();
 
             return View(part);
         }
 
-        // GET: Parts/Create
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Id");
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name");
             return View();
         }
 
-        // POST: Parts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Article,QuantityInStock,SupplierId")] Part part)
@@ -78,38 +74,27 @@ namespace ElectroWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Id", part.SupplierId);
+
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", part.SupplierId);
             return View(part);
         }
 
-        // GET: Parts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var part = await _context.Parts.FindAsync(id);
-            if (part == null)
-            {
-                return NotFound();
-            }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Id", part.SupplierId);
+            if (part == null) return NotFound();
+
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", part.SupplierId);
             return View(part);
         }
 
-        // POST: Parts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Article,QuantityInStock,SupplierId")] Part part)
         {
-            if (id != part.Id)
-            {
-                return NotFound();
-            }
+            if (id != part.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -120,52 +105,42 @@ namespace ElectroWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PartExists(part.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!PartExists(part.Id)) return NotFound();
+                    throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Id", part.SupplierId);
+
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", part.SupplierId);
             return View(part);
         }
 
-        // GET: Parts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var part = await _context.Parts
                 .Include(p => p.Supplier)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (part == null)
-            {
-                return NotFound();
-            }
+
+            if (part == null) return NotFound();
 
             return View(part);
         }
 
-        // POST: Parts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var part = await _context.Parts.FindAsync(id);
+
             if (part != null)
             {
                 _context.Parts.Remove(part);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
