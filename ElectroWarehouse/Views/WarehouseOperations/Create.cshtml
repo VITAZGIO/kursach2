@@ -1,55 +1,70 @@
 @model ElectroWarehouse.Models.WarehouseOperation
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавление операции";
 }
 
-<h1>Create</h1>
+<h1>Добавление операции</h1>
 
-<h4>WarehouseOperation</h4>
+<h4>Складская операция</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OperationType" class="control-label"></label>
-                <input asp-for="OperationType" class="form-control" />
+
+            <div class="form-group mb-3">
+                <label asp-for="OperationType" class="control-label">Тип операции</label>
+                <select asp-for="OperationType" class="form-control">
+                    <option value="Поступление">Поступление</option>
+                    <option value="Сборка">Сборка</option>
+                    <option value="Продажа">Продажа</option>
+                </select>
                 <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OperationDate" class="control-label"></label>
-                <input asp-for="OperationDate" class="form-control" />
+
+            <div class="form-group mb-3">
+                <label asp-for="OperationDate" class="control-label">Дата операции</label>
+                <input asp-for="OperationDate" class="form-control" type="datetime-local" />
                 <span asp-validation-for="OperationDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
+
+            <div class="form-group mb-3">
+                <label asp-for="Quantity" class="control-label">Количество</label>
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
+
+            <div class="form-group mb-3">
+                <label asp-for="EmployeeId" class="control-label">Сотрудник</label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="PartId" class="control-label"></label>
-                <select asp-for="PartId" class ="form-control" asp-items="ViewBag.PartId"></select>
+
+            <div class="form-group mb-3">
+                <label asp-for="PartId" class="control-label">Электродеталь</label>
+                <select asp-for="PartId" class="form-control" asp-items="ViewBag.PartId">
+                    <option value="">Не выбрано</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label asp-for="ControllerDeviceId" class="control-label"></label>
-                <select asp-for="ControllerDeviceId" class ="form-control" asp-items="ViewBag.ControllerDeviceId"></select>
+
+            <div class="form-group mb-3">
+                <label asp-for="ControllerDeviceId" class="control-label">Контроллер</label>
+                <select asp-for="ControllerDeviceId" class="form-control" asp-items="ViewBag.ControllerDeviceId">
+                    <option value="">Не выбрано</option>
+                </select>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Назад к списку</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
