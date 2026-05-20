@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-5">Информационная система склада электродеталей</h1>
+    <p class="lead mt-3">
+        Система предназначена для учёта электродеталей, поставщиков, контроллеров,
+        спецификаций сборки и складских операций.
+    </p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Учёт электродеталей</h5>
+                <p class="card-text">Хранение сведений о деталях, артикулах, поставщиках и остатках на складе.</p>
+                <a asp-controller="Parts" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Сборка контроллеров</h5>
+                <p class="card-text">Ведение готовых изделий и спецификаций, определяющих состав контроллеров.</p>
+                <a asp-controller="ControllerDevices" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Складские операции</h5>
+                <p class="card-text">Фиксация поступления деталей, сборки контроллеров и реализации готовой продукции.</p>
+                <a asp-controller="WarehouseOperations" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
