@@ -66,6 +66,20 @@
     </div>
 </div>
 
+@if (ViewBag.LowStockParts != null && ViewBag.LowStockParts.Count > 0)
+{
+    <div class="alert alert-warning mt-4">
+        <h5>Электродетали, требующие пополнения</h5>
+
+        <ul class="mb-0">
+            @foreach (var part in ViewBag.LowStockParts)
+            {
+                <li>@part.Name — остаток на складе: @part.QuantityInStock шт.</li>
+            }
+        </ul>
+    </div>
+}
+
 <div class="row mt-5">
     <div class="col-md-4 mb-3">
         <div class="card h-100">

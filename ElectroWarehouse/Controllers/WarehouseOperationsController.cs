@@ -161,9 +161,7 @@ namespace ElectroWarehouse.Controllers
         private async Task<(bool Success, string ErrorMessage)> ApplyWarehouseOperation(WarehouseOperation operation)
         {
             if (operation.Quantity <= 0)
-            {
                 return (false, "Количество должно быть больше нуля.");
-            }
 
             if (operation.OperationType == "Поступление")
             {
@@ -200,7 +198,7 @@ namespace ElectroWarehouse.Controllers
                     if (spec.Part == null)
                         return (false, "В спецификации найдена некорректная электродеталь.");
 
-                    var requiredQuantity = spec.QuantityPerUnit * operation.Quantity;
+                    int requiredQuantity = spec.QuantityPerUnit * operation.Quantity;
 
                     if (spec.Part.QuantityInStock < requiredQuantity)
                     {
@@ -211,12 +209,11 @@ namespace ElectroWarehouse.Controllers
 
                 foreach (var spec in specs)
                 {
-                    var requiredQuantity = spec.QuantityPerUnit * operation.Quantity;
+                    int requiredQuantity = spec.QuantityPerUnit * operation.Quantity;
                     spec.Part!.QuantityInStock -= requiredQuantity;
                 }
 
                 controller.QuantityInStock += operation.Quantity;
-
                 return (true, string.Empty);
             }
 

@@ -21,11 +21,11 @@ namespace ElectroWarehouse.Controllers
             ViewBag.OperationsCount = _context.WarehouseOperations.Count();
             ViewBag.EmployeesCount = _context.Employees.Count();
 
-            return View();
-        }
+            ViewBag.LowStockParts = _context.Parts
+                .Where(p => p.QuantityInStock < 20)
+                .OrderBy(p => p.QuantityInStock)
+                .ToList();
 
-        public IActionResult Privacy()
-        {
             return View();
         }
     }
