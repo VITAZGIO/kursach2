@@ -1,24 +1,32 @@
-using System.Diagnostics;
+using ElectroWarehouse.Data;
 using Microsoft.AspNetCore.Mvc;
-using ElectroWarehouse.Models;
 
-namespace ElectroWarehouse.Controllers;
-
-public class HomeController : Controller
+namespace ElectroWarehouse.Controllers
 {
-    public IActionResult Index()
+    public class HomeController : Controller
     {
-        return View();
-    }
+        private readonly ApplicationDbContext _context;
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Index()
+        {
+            ViewBag.SuppliersCount = _context.Suppliers.Count();
+            ViewBag.PartsCount = _context.Parts.Count();
+            ViewBag.ControllersCount = _context.ControllerDevices.Count();
+            ViewBag.SpecsCount = _context.ControllerSpecs.Count();
+            ViewBag.OperationsCount = _context.WarehouseOperations.Count();
+            ViewBag.EmployeesCount = _context.Employees.Count();
+
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }

@@ -20,10 +20,23 @@ namespace ElectroWarehouse.Controllers
         }
 
         // GET: Parts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            var applicationDbContext = _context.Parts.Include(p => p.Supplier);
-            return View(await applicationDbContext.ToListAsync());
+            var parts = _context.Parts
+                .Include(p => p.Supplier)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                parts = parts.Where(p =>
+                    p.Name.Contains(search) ||
+                    p.Article.Contains(search) ||
+                    p.Supplier!.Name.Contains(search));
+            }
+
+            ViewBag.Search = search;
+
+            return View(await parts.ToListAsync());
         }
 
         // GET: Parts/Details/5

@@ -6,12 +6,14 @@ namespace ElectroWarehouse.Models
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Выберите тип операции")]
         [Display(Name = "Тип операции")]
         public string OperationType { get; set; } = string.Empty;
 
         [Display(Name = "Дата операции")]
-        public DateTime OperationDate { get; set; }
+        public DateTime OperationDate { get; set; } = DateTime.Now;
 
+        [Range(1, 1000000, ErrorMessage = "Количество должно быть больше нуля")]
         [Display(Name = "Количество")]
         public int Quantity { get; set; }
 

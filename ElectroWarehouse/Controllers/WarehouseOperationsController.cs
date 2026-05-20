@@ -20,10 +20,27 @@ namespace ElectroWarehouse.Controllers
         }
 
         // GET: WarehouseOperations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            var applicationDbContext = _context.WarehouseOperations.Include(w => w.ControllerDevice).Include(w => w.Employee).Include(w => w.Part);
-            return View(await applicationDbContext.ToListAsync());
+            var operations = _context.WarehouseOperations
+                .Include(w => w.Employee)
+                .Include(w => w.Part)
+                .Include(w => w.ControllerDevice)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                operations = operations.Where(w =>
+                    w.OperationType.Contains(search) ||
+                    w.Employee!.FirstName.Contains(search) ||
+                    w.Employee.LastName.Contains(search) ||
+                    (w.Part != null && w.Part.Name.Contains(search)) ||
+                    (w.ControllerDevice != null && w.ControllerDevice.Name.Contains(search)));
+            }
+
+            ViewBag.Search = search;
+
+            return View(await operations.ToListAsync());
         }
 
         // GET: WarehouseOperations/Details/5

@@ -20,9 +20,20 @@ namespace ElectroWarehouse.Controllers
         }
 
         // GET: ControllerDevices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            return View(await _context.ControllerDevices.ToListAsync());
+            var controllers = _context.ControllerDevices.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                controllers = controllers.Where(c =>
+                    c.Name.Contains(search) ||
+                    c.IpRating.Contains(search));
+            }
+
+            ViewBag.Search = search;
+
+            return View(await controllers.ToListAsync());
         }
 
         // GET: ControllerDevices/Details/5

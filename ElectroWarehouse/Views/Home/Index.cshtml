@@ -10,6 +10,62 @@
     </p>
 </div>
 
+<div class="row mt-4 text-center">
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.PartsCount</h3>
+                <p>Электродеталей</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.ControllersCount</h3>
+                <p>Контроллеров</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.SuppliersCount</h3>
+                <p>Поставщиков</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.OperationsCount</h3>
+                <p>Операций</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.SpecsCount</h3>
+                <p>Спецификаций</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>@ViewBag.EmployeesCount</h3>
+                <p>Сотрудников</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-5">
     <div class="col-md-4 mb-3">
         <div class="card h-100">
@@ -24,8 +80,18 @@
     <div class="col-md-4 mb-3">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Сборка контроллеров</h5>
-                <p class="card-text">Ведение готовых изделий и спецификаций, определяющих состав контроллеров.</p>
+                <h5 class="card-title">Поставщики</h5>
+                <p class="card-text">Ведение списка поставщиков электродеталей и их контактной информации.</p>
+                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Контроллеры</h5>
+                <p class="card-text">Учёт готовых изделий, их цены, степени защиты и складских остатков.</p>
                 <a asp-controller="ControllerDevices" asp-action="Index" class="btn btn-primary">Перейти</a>
             </div>
         </div>
@@ -34,10 +100,31 @@
     <div class="col-md-4 mb-3">
         <div class="card h-100">
             <div class="card-body">
+                <h5 class="card-title">Спецификации</h5>
+                <p class="card-text">Описание состава контроллеров и количества деталей для сборки изделия.</p>
+                <a asp-controller="ControllerSpecs" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
                 <h5 class="card-title">Складские операции</h5>
-                <p class="card-text">Фиксация поступления деталей, сборки контроллеров и реализации готовой продукции.</p>
+                <p class="card-text">Фиксация поступления деталей, сборки контроллеров и реализации продукции.</p>
                 <a asp-controller="WarehouseOperations" asp-action="Index" class="btn btn-primary">Перейти</a>
             </div>
         </div>
     </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Сотрудники</h5>
+                <p class="card-text">Учёт сотрудников, ответственных за выполнение складских и производственных операций.</p>
+                <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
 </div>
+
