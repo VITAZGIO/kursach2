@@ -8,7 +8,7 @@
 ## Полезные ссылки
 
 - [GitHub проекта](https://github.com/VITAZGIO/kursach2)
-- [Отчёт по курсовой работе](https://docs.google.com/document/d/1L9saJqsv9mNPVqMdBoP9hT83f4zh5421/edit?usp=sharing&ouid=101629256350239357990&rtpof=true&sd=true)
+- [Отчёт по курсовой работе](https://drive.google.com/file/d/1fXUQIAbcjcrV_la-6qlbjDNzLMlx2j1p/view)
 
 ---
 
