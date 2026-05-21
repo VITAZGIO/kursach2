@@ -20,8 +20,18 @@ namespace ElectroWarehouse.Controllers
         }
 
         // GET: ControllerSpecs
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, string? sortOrder)
         {
+            ViewBag.Search = search;
+
+            ViewBag.ControllerSort = sortOrder == "controller_asc" ? "controller_desc" : "controller_asc";
+            ViewBag.PartSort = sortOrder == "part_asc" ? "part_desc" : "part_asc";
+            ViewBag.QuantitySort = sortOrder == "quantity_asc" ? "quantity_desc" : "quantity_asc";
+
+            ViewBag.ControllerIcon = sortOrder == "controller_asc" ? "↑" : "↓";
+            ViewBag.PartIcon = sortOrder == "part_asc" ? "↑" : "↓";
+            ViewBag.QuantityIcon = sortOrder == "quantity_asc" ? "↑" : "↓";
+
             var specs = _context.ControllerSpecs
                 .Include(c => c.ControllerDevice)
                 .Include(c => c.Part)
@@ -35,7 +45,15 @@ namespace ElectroWarehouse.Controllers
                     c.Part.Article.Contains(search));
             }
 
-            ViewBag.Search = search;
+            specs = sortOrder switch
+            {
+                "controller_desc" => specs.OrderByDescending(c => c.ControllerDevice!.Name),
+                "part_asc" => specs.OrderBy(c => c.Part!.Name),
+                "part_desc" => specs.OrderByDescending(c => c.Part!.Name),
+                "quantity_asc" => specs.OrderBy(c => c.QuantityPerUnit),
+                "quantity_desc" => specs.OrderByDescending(c => c.QuantityPerUnit),
+                _ => specs.OrderBy(c => c.ControllerDevice!.Name)
+            };
 
             return View(await specs.ToListAsync());
         }

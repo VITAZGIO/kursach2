@@ -9,7 +9,7 @@
 <form asp-action="Index" method="get" class="row mb-3">
     <div class="col-md-4">
         <input type="text" name="search" value="@ViewBag.Search" class="form-control"
-               placeholder="Поиск по названию или контактам" />
+               placeholder="Поиск по названию, городу или контакту" />
     </div>
     <div class="col-md-3">
         <button type="submit" class="btn btn-primary">Найти</button>
@@ -18,14 +18,23 @@
 </form>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Добавить поставщика</a>
+    <a asp-action="Create" class="btn btn-success">Добавить</a>
 </p>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Название поставщика</th>
-            <th>Контактная информация</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort" asp-route-search="@ViewBag.Search">
+                    Название @ViewBag.NameIcon
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.CitySort" asp-route-search="@ViewBag.Search">
+                    Город @ViewBag.CityIcon
+                </a>
+            </th>
+            <th>Контакт</th>
             <th></th>
         </tr>
     </thead>
@@ -33,12 +42,13 @@
 @foreach (var item in Model)
 {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.ContactInfo)</td>
+            <td>@item.Name</td>
+            <td>@item.City</td>
+            <td>@item.ContactInfo</td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Изменить</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробнее</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Удалить</a>
             </td>
         </tr>
 }

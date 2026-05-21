@@ -15,8 +15,14 @@ namespace ElectroWarehouse.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, string? sortOrder)
         {
+            ViewBag.Search = search;
+
+            ViewBag.DateSort = sortOrder == "date" ? "date_desc" : "date";
+            ViewBag.TypeSort = sortOrder == "type" ? "type_desc" : "type";
+            ViewBag.QuantitySort = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+
             var operations = _context.WarehouseOperations
                 .Include(w => w.Employee)
                 .Include(w => w.Part)
@@ -33,7 +39,19 @@ namespace ElectroWarehouse.Controllers
                     (w.ControllerDevice != null && w.ControllerDevice.Name.Contains(search)));
             }
 
-            ViewBag.Search = search;
+            operations = sortOrder switch
+            {
+                "date" => operations.OrderBy(w => w.OperationDate),
+                "date_desc" => operations.OrderByDescending(w => w.OperationDate),
+
+                "type" => operations.OrderBy(w => w.OperationType),
+                "type_desc" => operations.OrderByDescending(w => w.OperationType),
+
+                "quantity" => operations.OrderBy(w => w.Quantity),
+                "quantity_desc" => operations.OrderByDescending(w => w.Quantity),
+
+                _ => operations.OrderByDescending(w => w.OperationDate)
+            };
 
             return View(await operations.ToListAsync());
         }
