@@ -1,5 +1,6 @@
 using ElectroWarehouse.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElectroWarehouse.Controllers
 {
@@ -24,6 +25,15 @@ namespace ElectroWarehouse.Controllers
             ViewBag.LowStockParts = _context.Parts
                 .Where(p => p.QuantityInStock < 20)
                 .OrderBy(p => p.QuantityInStock)
+                .ToList();
+
+            ViewBag.AllParts = _context.Parts
+                .Include(p => p.Supplier)
+                .OrderBy(p => p.Name)
+                .ToList();
+
+            ViewBag.AllControllers = _context.ControllerDevices
+                .OrderBy(c => c.Name)
                 .ToList();
 
             return View();

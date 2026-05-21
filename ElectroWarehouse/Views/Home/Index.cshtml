@@ -2,143 +2,280 @@
     ViewData["Title"] = "Главная";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-5">Информационная система склада электродеталей</h1>
-    <p class="lead mt-3">
-        Система предназначена для учёта электродеталей, поставщиков, контроллеров,
-        спецификаций сборки и складских операций.
-    </p>
+<div class="container">
+    <div class="home-wrapper">
+
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold">
+                Информационная система склада электродеталей
+            </h1>
+
+            <p class="lead mt-3">
+                Система предназначена для учёта электродеталей, поставщиков,
+                контроллеров, спецификаций сборки и складских операций.
+            </p>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-primary">
+                    <div class="card-body">
+                        <h3>@ViewBag.PartsCount</h3>
+                        <p>Электродеталей</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-success">
+                    <div class="card-body">
+                        <h3>@ViewBag.ControllersCount</h3>
+                        <p>Контроллеров</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-warning">
+                    <div class="card-body">
+                        <h3>@ViewBag.SuppliersCount</h3>
+                        <p>Поставщиков</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-danger">
+                    <div class="card-body">
+                        <h3>@ViewBag.OperationsCount</h3>
+                        <p>Операций</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-info">
+                    <div class="card-body">
+                        <h3>@ViewBag.SpecsCount</h3>
+                        <p>Спецификаций</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card stats-card h-100 border-dark">
+                    <div class="card-body">
+                        <h3>@ViewBag.EmployeesCount</h3>
+                        <p>Сотрудников</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (ViewBag.LowStockParts != null && ViewBag.LowStockParts.Count > 0)
+        {
+            <div class="alert alert-warning mt-4">
+                <h5>Электродетали, требующие пополнения</h5>
+
+                <ul class="mb-0">
+                    @foreach (var part in ViewBag.LowStockParts)
+                    {
+                        <li>
+                            @part.Name — остаток на складе:
+                            @part.QuantityInStock шт.
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <div class="row mt-5">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Учёт электродеталей</h5>
+
+                        <p class="card-text">
+                            Хранение сведений о деталях, артикулах,
+                            поставщиках и остатках на складе.
+                        </p>
+
+                        <a asp-controller="Parts"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Поставщики</h5>
+
+                        <p class="card-text">
+                            Ведение списка поставщиков электродеталей
+                            и контактной информации.
+                        </p>
+
+                        <a asp-controller="Suppliers"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Контроллеры</h5>
+
+                        <p class="card-text">
+                            Учёт готовых изделий,
+                            степени защиты и остатков.
+                        </p>
+
+                        <a asp-controller="ControllerDevices"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Спецификации</h5>
+
+                        <p class="card-text">
+                            Состав контроллеров и количество деталей
+                            для сборки изделия.
+                        </p>
+
+                        <a asp-controller="ControllerSpecs"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Складские операции</h5>
+
+                        <p class="card-text">
+                            Поступление деталей, сборка контроллеров
+                            и реализация продукции.
+                        </p>
+
+                        <a asp-controller="WarehouseOperations"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Сотрудники</h5>
+
+                        <p class="card-text">
+                            Учёт сотрудников, ответственных
+                            за складские операции.
+                        </p>
+
+                        <a asp-controller="Employees"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Перейти
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h2 class="mb-4">Состояние склада</h2>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            Электродетали на складе
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Наименование</th>
+                                        <th>Артикул</th>
+                                        <th>Поставщик</th>
+                                        <th>Количество</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var part in ViewBag.AllParts)
+                                    {
+                                        <tr>
+                                            <td>@part.Name</td>
+                                            <td>@part.Article</td>
+                                            <td>@part.Supplier?.Name</td>
+                                            <td>@part.QuantityInStock шт.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-success text-white">
+                            Контроллеры на складе
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Наименование</th>
+                                        <th>Степень защиты</th>
+                                        <th>Цена</th>
+                                        <th>Количество</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var controller in ViewBag.AllControllers)
+                                    {
+                                        <tr>
+                                            <td>@controller.Name</td>
+                                            <td>@controller.IpRating</td>
+                                            <td>@controller.Price ₽</td>
+                                            <td>@controller.QuantityInStock шт.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-<div class="row mt-4 text-center">
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.PartsCount</h3>
-                <p>Электродеталей</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.ControllersCount</h3>
-                <p>Контроллеров</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.SuppliersCount</h3>
-                <p>Поставщиков</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.OperationsCount</h3>
-                <p>Операций</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.SpecsCount</h3>
-                <p>Спецификаций</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>@ViewBag.EmployeesCount</h3>
-                <p>Сотрудников</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-@if (ViewBag.LowStockParts != null && ViewBag.LowStockParts.Count > 0)
-{
-    <div class="alert alert-warning mt-4">
-        <h5>Электродетали, требующие пополнения</h5>
-
-        <ul class="mb-0">
-            @foreach (var part in ViewBag.LowStockParts)
-            {
-                <li>@part.Name — остаток на складе: @part.QuantityInStock шт.</li>
-            }
-        </ul>
-    </div>
-}
-
-<div class="row mt-5">
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Учёт электродеталей</h5>
-                <p class="card-text">Хранение сведений о деталях, артикулах, поставщиках и остатках на складе.</p>
-                <a asp-controller="Parts" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Поставщики</h5>
-                <p class="card-text">Ведение списка поставщиков электродеталей и их контактной информации.</p>
-                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Контроллеры</h5>
-                <p class="card-text">Учёт готовых изделий, их цены, степени защиты и складских остатков.</p>
-                <a asp-controller="ControllerDevices" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Спецификации</h5>
-                <p class="card-text">Описание состава контроллеров и количества деталей для сборки изделия.</p>
-                <a asp-controller="ControllerSpecs" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Складские операции</h5>
-                <p class="card-text">Фиксация поступления деталей, сборки контроллеров и реализации продукции.</p>
-                <a asp-controller="WarehouseOperations" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Сотрудники</h5>
-                <p class="card-text">Учёт сотрудников, ответственных за выполнение складских и производственных операций.</p>
-                <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Перейти</a>
-            </div>
-        </div>
-    </div>
-</div>
-

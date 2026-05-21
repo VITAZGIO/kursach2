@@ -55,22 +55,16 @@ namespace ElectroWarehouse.Controllers
             operations = sortOrder switch
             {
                 "type_desc" => operations.OrderByDescending(w => w.OperationType),
-
                 "date_asc" => operations.OrderBy(w => w.OperationDate),
                 "date_desc" => operations.OrderByDescending(w => w.OperationDate),
-
                 "quantity_asc" => operations.OrderBy(w => w.Quantity),
                 "quantity_desc" => operations.OrderByDescending(w => w.Quantity),
-
                 "employee_asc" => operations.OrderBy(w => w.Employee!.LastName).ThenBy(w => w.Employee!.FirstName),
                 "employee_desc" => operations.OrderByDescending(w => w.Employee!.LastName).ThenByDescending(w => w.Employee!.FirstName),
-
                 "part_asc" => operations.OrderBy(w => w.Part == null ? "" : w.Part.Name),
                 "part_desc" => operations.OrderByDescending(w => w.Part == null ? "" : w.Part.Name),
-
                 "controller_asc" => operations.OrderBy(w => w.ControllerDevice == null ? "" : w.ControllerDevice.Name),
                 "controller_desc" => operations.OrderByDescending(w => w.ControllerDevice == null ? "" : w.ControllerDevice.Name),
-
                 _ => operations.OrderBy(w => w.OperationType)
             };
 
@@ -186,10 +180,21 @@ namespace ElectroWarehouse.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var warehouseOperation = await _context.WarehouseOperations.FindAsync(id);
+            var warehouseOperation = await _context.WarehouseOperations
+                .Include(w => w.ControllerDevice)
+                .Include(w => w.Part)
+                .FirstOrDefaultAsync(w => w.Id == id);
 
             if (warehouseOperation != null)
             {
+                var result = await ReverseWarehouseOperation(warehouseOperation);
+
+                if (!result.Success)
+                {
+                    ModelState.AddModelError("", result.ErrorMessage);
+                    return View("Delete", warehouseOperation);
+                }
+
                 _context.WarehouseOperations.Remove(warehouseOperation);
                 await _context.SaveChangesAsync();
             }
@@ -273,6 +278,70 @@ namespace ElectroWarehouse.Controllers
             }
 
             return (false, "Выбран неизвестный тип операции.");
+        }
+
+        private async Task<(bool Success, string ErrorMessage)> ReverseWarehouseOperation(WarehouseOperation operation)
+        {
+            if (operation.OperationType == "Поступление")
+            {
+                if (!operation.PartId.HasValue)
+                    return (false, "Невозможно отменить поступление: электродеталь не указана.");
+
+                var part = await _context.Parts.FindAsync(operation.PartId.Value);
+                if (part == null)
+                    return (false, "Электродеталь не найдена.");
+
+                if (part.QuantityInStock < operation.Quantity)
+                    return (false, "Невозможно удалить операцию: на складе уже недостаточно этих деталей.");
+
+                part.QuantityInStock -= operation.Quantity;
+                return (true, string.Empty);
+            }
+
+            if (operation.OperationType == "Сборка")
+            {
+                if (!operation.ControllerDeviceId.HasValue)
+                    return (false, "Невозможно отменить сборку: контроллер не указан.");
+
+                var controller = await _context.ControllerDevices.FindAsync(operation.ControllerDeviceId.Value);
+                if (controller == null)
+                    return (false, "Контроллер не найден.");
+
+                if (controller.QuantityInStock < operation.Quantity)
+                    return (false, "Невозможно удалить операцию: на складе уже недостаточно собранных контроллеров.");
+
+                var specs = await _context.ControllerSpecs
+                    .Include(s => s.Part)
+                    .Where(s => s.ControllerDeviceId == operation.ControllerDeviceId.Value)
+                    .ToListAsync();
+
+                controller.QuantityInStock -= operation.Quantity;
+
+                foreach (var spec in specs)
+                {
+                    if (spec.Part != null)
+                    {
+                        spec.Part.QuantityInStock += spec.QuantityPerUnit * operation.Quantity;
+                    }
+                }
+
+                return (true, string.Empty);
+            }
+
+            if (operation.OperationType == "Продажа")
+            {
+                if (!operation.ControllerDeviceId.HasValue)
+                    return (false, "Невозможно отменить продажу: контроллер не указан.");
+
+                var controller = await _context.ControllerDevices.FindAsync(operation.ControllerDeviceId.Value);
+                if (controller == null)
+                    return (false, "Контроллер не найден.");
+
+                controller.QuantityInStock += operation.Quantity;
+                return (true, string.Empty);
+            }
+
+            return (false, "Неизвестный тип операции.");
         }
 
         private void FillSelectLists(WarehouseOperation? operation = null)
