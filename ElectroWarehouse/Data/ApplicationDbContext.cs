@@ -16,5 +16,6 @@ namespace ElectroWarehouse.Data
         public DbSet<ControllerDevice> ControllerDevices { get; set; }
         public DbSet<ControllerSpec> ControllerSpecs { get; set; }
         public DbSet<WarehouseOperation> WarehouseOperations { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
     }
 }

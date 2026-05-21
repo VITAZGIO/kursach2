@@ -10,7 +10,7 @@ using ElectroWarehouse.Models;
 
 namespace ElectroWarehouse.Controllers
 {
-    public class SuppliersController : Controller
+    public class SuppliersController : BaseController
     {
         private readonly ApplicationDbContext _context;
 

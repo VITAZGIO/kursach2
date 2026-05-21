@@ -1,0 +1,35 @@
+@model IEnumerable<ElectroWarehouse.Models.WarehouseOperation>
+
+@{
+    ViewData["Title"] = "История операций";
+}
+
+<h2>История операций</h2>
+
+<p>На странице отображаются последние 10 складских операций.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Тип операции</th>
+            <th>Количество</th>
+            <th>Сотрудник</th>
+            <th>Электродеталь</th>
+            <th>Контроллер</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.OperationDate.ToString("dd.MM.yyyy")</td>
+                <td>@item.OperationType</td>
+                <td>@item.Quantity</td>
+                <td>@($"{item.Employee?.LastName} {item.Employee?.FirstName}")</td>
+                <td>@(item.Part?.Name ?? "—")</td>
+                <td>@(item.ControllerDevice?.Name ?? "—")</td>
+            </tr>
+        }
+    </tbody>
+</table>

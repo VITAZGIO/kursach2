@@ -10,7 +10,7 @@ using ElectroWarehouse.Models;
 
 namespace ElectroWarehouse.Controllers
 {
-    public class EmployeesController : Controller
+    public class EmployeesController : BaseController
     {
         private readonly ApplicationDbContext _context;
 

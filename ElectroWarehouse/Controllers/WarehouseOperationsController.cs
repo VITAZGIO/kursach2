@@ -6,7 +6,7 @@ using ElectroWarehouse.Models;
 
 namespace ElectroWarehouse.Controllers
 {
-    public class WarehouseOperationsController : Controller
+    public class WarehouseOperationsController : BaseController
     {
         private readonly ApplicationDbContext _context;
 

@@ -95,6 +95,16 @@ namespace ElectroWarehouse.Data
             };
 
             context.WarehouseOperations.AddRange(operations);
+
+            if (!context.AppUsers.Any())
+            {
+                context.AppUsers.Add(new AppUser
+                {
+                    Login = "admin",
+                    Password = "admin"
+                });
+            }
+
             context.SaveChanges();
         }
     }
