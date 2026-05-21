@@ -19,9 +19,19 @@ namespace ElectroWarehouse.Controllers
         {
             ViewBag.Search = search;
 
-            ViewBag.DateSort = sortOrder == "date" ? "date_desc" : "date";
-            ViewBag.TypeSort = sortOrder == "type" ? "type_desc" : "type";
-            ViewBag.QuantitySort = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            ViewBag.TypeSort = sortOrder == "type_asc" ? "type_desc" : "type_asc";
+            ViewBag.DateSort = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.QuantitySort = sortOrder == "quantity_asc" ? "quantity_desc" : "quantity_asc";
+            ViewBag.EmployeeSort = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
+            ViewBag.PartSort = sortOrder == "part_asc" ? "part_desc" : "part_asc";
+            ViewBag.ControllerSort = sortOrder == "controller_asc" ? "controller_desc" : "controller_asc";
+
+            ViewBag.TypeIcon = sortOrder == "type_asc" ? "↑" : "↓";
+            ViewBag.DateIcon = sortOrder == "date_asc" ? "↑" : "↓";
+            ViewBag.QuantityIcon = sortOrder == "quantity_asc" ? "↑" : "↓";
+            ViewBag.EmployeeIcon = sortOrder == "employee_asc" ? "↑" : "↓";
+            ViewBag.PartIcon = sortOrder == "part_asc" ? "↑" : "↓";
+            ViewBag.ControllerIcon = sortOrder == "controller_asc" ? "↑" : "↓";
 
             var operations = _context.WarehouseOperations
                 .Include(w => w.Employee)
@@ -35,22 +45,33 @@ namespace ElectroWarehouse.Controllers
                     w.OperationType.Contains(search) ||
                     w.Employee!.FirstName.Contains(search) ||
                     w.Employee.LastName.Contains(search) ||
+                    (w.Employee.MiddleName != null && w.Employee.MiddleName.Contains(search)) ||
                     (w.Part != null && w.Part.Name.Contains(search)) ||
-                    (w.ControllerDevice != null && w.ControllerDevice.Name.Contains(search)));
+                    (w.Part != null && w.Part.Article.Contains(search)) ||
+                    (w.ControllerDevice != null && w.ControllerDevice.Name.Contains(search)) ||
+                    (w.ControllerDevice != null && w.ControllerDevice.IpRating.Contains(search)));
             }
 
             operations = sortOrder switch
             {
-                "date" => operations.OrderBy(w => w.OperationDate),
-                "date_desc" => operations.OrderByDescending(w => w.OperationDate),
-
-                "type" => operations.OrderBy(w => w.OperationType),
                 "type_desc" => operations.OrderByDescending(w => w.OperationType),
 
-                "quantity" => operations.OrderBy(w => w.Quantity),
+                "date_asc" => operations.OrderBy(w => w.OperationDate),
+                "date_desc" => operations.OrderByDescending(w => w.OperationDate),
+
+                "quantity_asc" => operations.OrderBy(w => w.Quantity),
                 "quantity_desc" => operations.OrderByDescending(w => w.Quantity),
 
-                _ => operations.OrderByDescending(w => w.OperationDate)
+                "employee_asc" => operations.OrderBy(w => w.Employee!.LastName).ThenBy(w => w.Employee!.FirstName),
+                "employee_desc" => operations.OrderByDescending(w => w.Employee!.LastName).ThenByDescending(w => w.Employee!.FirstName),
+
+                "part_asc" => operations.OrderBy(w => w.Part == null ? "" : w.Part.Name),
+                "part_desc" => operations.OrderByDescending(w => w.Part == null ? "" : w.Part.Name),
+
+                "controller_asc" => operations.OrderBy(w => w.ControllerDevice == null ? "" : w.ControllerDevice.Name),
+                "controller_desc" => operations.OrderByDescending(w => w.ControllerDevice == null ? "" : w.ControllerDevice.Name),
+
+                _ => operations.OrderBy(w => w.OperationType)
             };
 
             return View(await operations.ToListAsync());

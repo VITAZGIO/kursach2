@@ -18,26 +18,30 @@
 </form>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Добавить контроллер</a>
+    <a asp-action="Create" class="btn btn-success">Добавить контроллер</a>
 </p>
 
-<table class="table">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>
                 <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.NameSort">
-                    Наименование контроллера
+                    Наименование контроллера @ViewBag.NameIcon
                 </a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.PriceSort">
-                    Цена
+                    Цена @ViewBag.PriceIcon
                 </a>
             </th>
-            <th>Степень защиты IP</th>
+            <th>
+                <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.IpRatingSort">
+                    Степень защиты IP @ViewBag.IpRatingIcon
+                </a>
+            </th>
             <th>
                 <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.QuantitySort">
-                    Количество на складе
+                    Количество на складе @ViewBag.QuantityIcon
                 </a>
             </th>
             <th></th>
@@ -47,14 +51,14 @@
 @foreach (var item in Model)
 {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.Price)</td>
-            <td>@Html.DisplayFor(modelItem => item.IpRating)</td>
-            <td>@Html.DisplayFor(modelItem => item.QuantityInStock)</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.IpRating</td>
+            <td>@item.QuantityInStock</td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Изменить</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробнее</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Удалить</a>
             </td>
         </tr>
 }

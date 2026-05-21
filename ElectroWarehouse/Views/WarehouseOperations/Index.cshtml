@@ -26,22 +26,34 @@
         <tr>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewBag.TypeSort" asp-route-search="@ViewBag.Search">
-                    Тип операции
+                    Тип операции @ViewBag.TypeIcon
                 </a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort" asp-route-search="@ViewBag.Search">
-                    Дата операции
+                    Дата операции @ViewBag.DateIcon
                 </a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewBag.QuantitySort" asp-route-search="@ViewBag.Search">
-                    Количество
+                    Количество @ViewBag.QuantityIcon
                 </a>
             </th>
-            <th>Сотрудник</th>
-            <th>Электродеталь</th>
-            <th>Контроллер</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.EmployeeSort" asp-route-search="@ViewBag.Search">
+                    Сотрудник @ViewBag.EmployeeIcon
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PartSort" asp-route-search="@ViewBag.Search">
+                    Электродеталь @ViewBag.PartIcon
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ControllerSort" asp-route-search="@ViewBag.Search">
+                    Контроллер @ViewBag.ControllerIcon
+                </a>
+            </th>
             <th></th>
         </tr>
     </thead>

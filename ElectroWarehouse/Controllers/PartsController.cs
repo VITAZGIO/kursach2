@@ -18,8 +18,16 @@ namespace ElectroWarehouse.Controllers
         public async Task<IActionResult> Index(string? search, string? sortOrder)
         {
             ViewBag.Search = search;
-            ViewBag.NameSort = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.QuantitySort = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+
+            ViewBag.NameSort = sortOrder == "name_asc" ? "name_desc" : "name_asc";
+            ViewBag.ArticleSort = sortOrder == "article_asc" ? "article_desc" : "article_asc";
+            ViewBag.QuantitySort = sortOrder == "quantity_asc" ? "quantity_desc" : "quantity_asc";
+            ViewBag.SupplierSort = sortOrder == "supplier_asc" ? "supplier_desc" : "supplier_asc";
+
+            ViewBag.NameIcon = sortOrder == "name_asc" ? "↑" : "↓";
+            ViewBag.ArticleIcon = sortOrder == "article_asc" ? "↑" : "↓";
+            ViewBag.QuantityIcon = sortOrder == "quantity_asc" ? "↑" : "↓";
+            ViewBag.SupplierIcon = sortOrder == "supplier_asc" ? "↑" : "↓";
 
             var parts = _context.Parts
                 .Include(p => p.Supplier)
@@ -35,10 +43,13 @@ namespace ElectroWarehouse.Controllers
 
             parts = sortOrder switch
             {
-                "name" => parts.OrderBy(p => p.Name),
                 "name_desc" => parts.OrderByDescending(p => p.Name),
-                "quantity" => parts.OrderBy(p => p.QuantityInStock),
+                "article_asc" => parts.OrderBy(p => p.Article),
+                "article_desc" => parts.OrderByDescending(p => p.Article),
+                "quantity_asc" => parts.OrderBy(p => p.QuantityInStock),
                 "quantity_desc" => parts.OrderByDescending(p => p.QuantityInStock),
+                "supplier_asc" => parts.OrderBy(p => p.Supplier!.Name),
+                "supplier_desc" => parts.OrderByDescending(p => p.Supplier!.Name),
                 _ => parts.OrderBy(p => p.Name)
             };
 

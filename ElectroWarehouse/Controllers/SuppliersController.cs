@@ -25,28 +25,26 @@ namespace ElectroWarehouse.Controllers
             ViewBag.Search = search;
 
             ViewBag.NameSort = sortOrder == "name_asc" ? "name_desc" : "name_asc";
-            ViewBag.CitySort = sortOrder == "city_asc" ? "city_desc" : "city_asc";
+            ViewBag.ContactSort = sortOrder == "contact_asc" ? "contact_desc" : "contact_asc";
 
             ViewBag.NameIcon = sortOrder == "name_asc" ? "↑" : "↓";
-            ViewBag.CityIcon = sortOrder == "city_asc" ? "↑" : "↓";
+            ViewBag.ContactIcon = sortOrder == "contact_asc" ? "↑" : "↓";
 
             var suppliers = _context.Suppliers.AsQueryable();
 
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrWhiteSpace(search))
             {
                 suppliers = suppliers.Where(s =>
                     s.Name.Contains(search) ||
-                    s.City.Contains(search) ||
-                    s.ContactInfo.Contains(search)
-                );
+                    s.ContactInfo.Contains(search));
             }
 
             suppliers = sortOrder switch
             {
                 "name_desc" => suppliers.OrderByDescending(s => s.Name),
-                "city_asc" => suppliers.OrderBy(s => s.City),
-                "city_desc" => suppliers.OrderByDescending(s => s.City),
-                _ => suppliers.OrderBy(s => s.Name),
+                "contact_asc" => suppliers.OrderBy(s => s.ContactInfo),
+                "contact_desc" => suppliers.OrderByDescending(s => s.ContactInfo),
+                _ => suppliers.OrderBy(s => s.Name)
             };
 
             return View(await suppliers.ToListAsync());
