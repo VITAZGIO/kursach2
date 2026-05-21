@@ -3,8 +3,12 @@
 Курсовая работа №2  
 Тема: «Информационная система склада электродеталей»
 
-GitHub проекта:  
-https://github.com/VITAZGIO/kursach2
+---
+
+## Полезные ссылки
+
+- [GitHub проекта](https://github.com/VITAZGIO/kursach2)
+- [Отчёт по курсовой работе](https://docs.google.com/document/d/1L9saJqsv9mNPVqMdBoP9hT83f4zh5421/edit?usp=sharing&ouid=101629256350239357990&rtpof=true&sd=true)
 
 ---
 
