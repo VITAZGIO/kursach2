@@ -292,7 +292,7 @@ dotnet run
 
 ---
 
-# Автор
+# Создано
 
-VITAZGIO  
-2026
+VITAZ  
+05/2026
