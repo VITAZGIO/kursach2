@@ -1,0 +1,7 @@
+services:
+  kursach2:
+    build: .
+    container_name: kursach2
+    ports:
+      - "5010:8080"
+    restart: unless-stopped
