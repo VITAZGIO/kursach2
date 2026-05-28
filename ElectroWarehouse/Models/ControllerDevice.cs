@@ -25,5 +25,8 @@ namespace ElectroWarehouse.Models
         [Range(0, 1000000, ErrorMessage = "Количество не может быть отрицательным")]
         [Display(Name = "Количество на складе")]
         public int QuantityInStock { get; set; }
+
+        [Display(Name = "Фото")]
+        public string? ImagePath { get; set; }
     }
 }

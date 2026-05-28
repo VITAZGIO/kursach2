@@ -8,6 +8,23 @@ namespace ElectroWarehouse.Data
         {
             context.Database.EnsureCreated();
 
+            var admin = context.AppUsers.FirstOrDefault(u => u.Login == "admin");
+            if (admin == null)
+            {
+                context.AppUsers.Add(new AppUser
+                {
+                    Login = "admin",
+                    Password = "admin",
+                    Role = "Admin"
+                });
+                context.SaveChanges();
+            }
+            else
+            {
+                admin.Role = "Admin";
+                context.SaveChanges();
+            }
+
             if (context.Suppliers.Any())
             {
                 return;
@@ -95,15 +112,6 @@ namespace ElectroWarehouse.Data
             };
 
             context.WarehouseOperations.AddRange(operations);
-
-            if (!context.AppUsers.Any())
-            {
-                context.AppUsers.Add(new AppUser
-                {
-                    Login = "admin",
-                    Password = "admin"
-                });
-            }
 
             context.SaveChanges();
         }

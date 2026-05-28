@@ -10,9 +10,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImagePath" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,6 +33,19 @@
                 <label asp-for="QuantityInStock" class="control-label"></label>
                 <input asp-for="QuantityInStock" class="form-control" />
                 <span asp-validation-for="QuantityInStock" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.ImagePath))
+            {
+                <div class="form-group">
+                    <label class="control-label">Текущее фото</label>
+                    <div>
+                        <img src="@Model.ImagePath" alt="@Model.Name" style="width: 160px; height: 160px; object-fit: cover;" />
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <label for="imageFile" class="control-label">Фото</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

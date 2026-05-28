@@ -25,5 +25,8 @@ namespace ElectroWarehouse.Models
 
         [Display(Name = "Поставщик")]
         public Supplier? Supplier { get; set; }
+
+        [Display(Name = "Фото")]
+        public string? ImagePath { get; set; }
     }
 }

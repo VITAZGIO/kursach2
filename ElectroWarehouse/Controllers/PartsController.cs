@@ -9,10 +9,12 @@ namespace ElectroWarehouse.Controllers
     public class PartsController : BaseController
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public PartsController(ApplicationDbContext context)
+        public PartsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public async Task<IActionResult> Index(string? search, string? sortOrder)
@@ -103,7 +105,10 @@ namespace ElectroWarehouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Article,QuantityInStock,SupplierId")] Part part)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,Name,Article,QuantityInStock,SupplierId,ImagePath")] Part part,
+            IFormFile? imageFile)
         {
             if (id != part.Id) return NotFound();
 
@@ -111,6 +116,11 @@ namespace ElectroWarehouse.Controllers
             {
                 try
                 {
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        part.ImagePath = await SaveImageAsync(imageFile, "parts");
+                    }
+
                     _context.Update(part);
                     await _context.SaveChangesAsync();
                 }
@@ -158,6 +168,23 @@ namespace ElectroWarehouse.Controllers
         private bool PartExists(int id)
         {
             return _context.Parts.Any(e => e.Id == id);
+        }
+
+        private async Task<string> SaveImageAsync(IFormFile imageFile, string folderName)
+        {
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "images", folderName);
+            Directory.CreateDirectory(uploadsFolder);
+
+            var extension = Path.GetExtension(imageFile.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            return $"/images/{folderName}/{fileName}";
         }
     }
 }

@@ -31,6 +31,7 @@ namespace ElectroWarehouse.Controllers
             }
 
             HttpContext.Session.SetString("UserLogin", user.Login);
+            HttpContext.Session.SetString("UserRole", user.Role);
             return RedirectToAction("Index", "Home");
         }
 
@@ -45,16 +46,24 @@ namespace ElectroWarehouse.Controllers
             if (!ModelState.IsValid)
                 return View(user);
 
+            if (string.Equals(user.Login, "admin", StringComparison.OrdinalIgnoreCase))
+            {
+                ViewBag.Error = "Логин admin зарезервирован";
+                return View(user);
+            }
+
             if (_context.AppUsers.Any(u => u.Login == user.Login))
             {
                 ViewBag.Error = "Пользователь с таким логином уже существует";
                 return View(user);
             }
 
+            user.Role = "User";
             _context.AppUsers.Add(user);
             _context.SaveChanges();
 
             HttpContext.Session.SetString("UserLogin", user.Login);
+            HttpContext.Session.SetString("UserRole", user.Role);
             return RedirectToAction("Index", "Home");
         }
 

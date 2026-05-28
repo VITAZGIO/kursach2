@@ -13,5 +13,9 @@ namespace ElectroWarehouse.Models
         [Required]
         [Display(Name = "Пароль")]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Роль")]
+        public string Role { get; set; } = "User";
     }
 }

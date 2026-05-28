@@ -1,6 +1,7 @@
 @model IEnumerable<ElectroWarehouse.Models.Part>
 
 @{
+    var isAdmin = ViewBag.IsAdmin == true;
     ViewData["Title"] = "Электродетали";
 }
 
@@ -18,7 +19,10 @@
 </form>
 
 <p>
+    @if (isAdmin)
+    {
     <a asp-action="Create" class="btn btn-success">Добавить электродеталь</a>
+    }
 </p>
 
 <table class="table table-striped table-bordered">
@@ -29,6 +33,7 @@
                     Наименование детали @ViewBag.NameIcon
                 </a>
             </th>
+            <th>Фото</th>
             <th>
                 <a asp-action="Index" asp-route-search="@ViewBag.Search" asp-route-sortOrder="@ViewBag.ArticleSort">
                     Артикул @ViewBag.ArticleIcon
@@ -52,13 +57,25 @@
 {
         <tr>
             <td>@item.Name</td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(item.ImagePath))
+                {
+                    <img src="@item.ImagePath" alt="@item.Name" style="width: 64px; height: 64px; object-fit: cover;" />
+                }
+            </td>
             <td>@item.Article</td>
             <td>@item.QuantityInStock</td>
             <td>@item.Supplier?.Name</td>
             <td>
+                @if (isAdmin)
+                {
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Изменить</a>
+                }
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробнее</a>
+                @if (isAdmin)
+                {
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Удалить</a>
+                }
             </td>
         </tr>
 }
